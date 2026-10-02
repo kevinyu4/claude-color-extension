@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Session Lights</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">
+        <span class="lights" aria-hidden="true"><i class="r"></i><i class="g"></i><i class="d"></i></span>
+        <div>
+          <h1>session<span class="dim">.</span>lights<span class="cursor" aria-hidden="true"></span></h1>
+          <p class="sub">claude.ai &middot; chats + code</p>
+        </div>
+      </div>
+      <button id="mark-all" class="ghost" type="button" title="Mark every finished session as read">mark all read</button>
+    </header>
+
+    <section class="stats" aria-label="Summary">
+      <div class="stat running"><span class="n" id="n-running">0</span><span class="l">running</span></div>
+      <div class="stat unread"><span class="n" id="n-unread">0</span><span class="l">unread</span></div>
+      <div class="stat idle"><span class="n" id="n-idle">0</span><span class="l">idle</span></div>
+    </section>
+
+    <section class="lists">
+      <h2><span class="prompt">$</span> active</h2>
+      <ul id="list" class="list"></ul>
+      <p id="empty" class="empty" hidden>
+        <span class="prompt">&gt;</span> all quiet. nothing running, nothing unread.
+      </p>
+    </section>
+
+    <section class="settings" aria-label="Settings">
+      <h2><span class="prompt">$</span> config</h2>
+      <label class="toggle"><input type="checkbox" data-setting="chats" /><span class="sw"></span>Chats &amp; tasks</label>
+      <label class="toggle"><input type="checkbox" data-setting="code" /><span class="sw"></span>Claude Code sessions</label>
+      <label class="toggle"><input type="checkbox" data-setting="tint" /><span class="sw"></span>Row tint</label>
+      <label class="toggle"><input type="checkbox" data-setting="animate" /><span class="sw"></span>Running animation</label>
+      <label class="toggle"><input type="checkbox" data-setting="debug" /><span class="sw"></span>Debug outlines</label>
+    </section>
+
+    <footer class="legend">
+      <span><i class="dot r"></i>running</span>
+      <span><i class="dot g"></i>done, unread</span>
+      <span><i class="dot d"></i>seen / empty</span>
+    </footer>
+
+    <template id="item-tpl">
+      <li>
+        <button class="item" type="button">
+          <i class="dot"></i>
+          <span class="title"></span>
+          <span class="meta"><span class="kind"></span><span class="ago"></span></span>
+        </button>
+      </li>
+    </template>
+
+    <script src="shared.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

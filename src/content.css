@@ -1,0 +1,127 @@
+/* Session Lights - row styling driven by data-sl-state set in content.js.
+ *
+ * Selectors are doubled for specificity instead of !important so the
+ * running animation (which can't override !important) still applies.
+ */
+
+:root {
+  --sl-running: 255 77 94; /* neon coral red */
+  --sl-unread: 34 214 129; /* terminal green */
+}
+
+[data-sl-state][data-sl-state] {
+  position: relative;
+  transition: box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+[data-sl-state='running'][data-sl-state='running'] {
+  --sl-c: var(--sl-running);
+}
+
+[data-sl-state='unread'][data-sl-state='unread'] {
+  --sl-c: var(--sl-unread);
+}
+
+/* Accent bar + inner glow along the left edge. */
+html [data-sl-state][data-sl-state] {
+  box-shadow:
+    inset 3px 0 0 rgb(var(--sl-c)),
+    inset 16px 0 18px -16px rgb(var(--sl-c) / 0.55);
+}
+
+/* Soft row tint, layered over whatever background the app uses. */
+html.sl-tint [data-sl-state][data-sl-state] {
+  background-image: linear-gradient(
+    90deg,
+    rgb(var(--sl-c) / 0.18) 0%,
+    rgb(var(--sl-c) / 0.07) 45%,
+    rgb(var(--sl-c) / 0) 85%
+  );
+}
+
+/* Recolor icons drawn with currentColor. */
+html [data-sl-state][data-sl-state] svg {
+  color: rgb(var(--sl-c));
+  filter: drop-shadow(0 0 3px rgb(var(--sl-c) / 0.65));
+  transition: color 0.25s ease, filter 0.25s ease;
+}
+
+html [data-sl-state='unread'][data-sl-state='unread'] {
+  font-weight: 600;
+}
+
+/* Running: breathing glow + slow scan line. */
+html.sl-animate [data-sl-state='running'][data-sl-state='running'] {
+  animation: sl-breathe 1.8s ease-in-out infinite;
+}
+
+html.sl-animate.sl-tint [data-sl-state='running'][data-sl-state='running'] {
+  background-image:
+    linear-gradient(
+      100deg,
+      rgb(var(--sl-c) / 0) 35%,
+      rgb(var(--sl-c) / 0.16) 50%,
+      rgb(var(--sl-c) / 0) 65%
+    ),
+    linear-gradient(
+      90deg,
+      rgb(var(--sl-c) / 0.18) 0%,
+      rgb(var(--sl-c) / 0.07) 45%,
+      rgb(var(--sl-c) / 0) 85%
+    );
+  background-size: 300% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  animation:
+    sl-breathe 1.8s ease-in-out infinite,
+    sl-scan 2.6s linear infinite;
+}
+
+html.sl-animate [data-sl-state='running'][data-sl-state='running'] svg {
+  animation: sl-icon 1.8s ease-in-out infinite;
+}
+
+@keyframes sl-breathe {
+  0%,
+  100% {
+    box-shadow:
+      inset 3px 0 0 rgb(var(--sl-c)),
+      inset 14px 0 16px -16px rgb(var(--sl-c) / 0.35);
+  }
+  50% {
+    box-shadow:
+      inset 3px 0 0 rgb(var(--sl-c)),
+      inset 26px 0 22px -16px rgb(var(--sl-c) / 0.85);
+  }
+}
+
+@keyframes sl-scan {
+  from {
+    background-position: 100% 0, 0 0;
+  }
+  to {
+    background-position: 0% 0, 0 0;
+  }
+}
+
+@keyframes sl-icon {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 2px rgb(var(--sl-c) / 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 6px rgb(var(--sl-c) / 0.95));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.sl-animate [data-sl-state][data-sl-state],
+  html.sl-animate [data-sl-state][data-sl-state] svg {
+    animation: none;
+  }
+}
+
+/* Debug: outline every row the extension recognized. */
+html.sl-debug [data-sl-row] {
+  outline: 1px dashed rgb(120 160 255 / 0.7);
+  outline-offset: -1px;
+}

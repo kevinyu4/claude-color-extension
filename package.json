@@ -1,0 +1,15 @@
+{
+  "name": "session-lights",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrome extension that color-codes claude.ai chat and Claude Code sessions by status.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/",
+    "icons": "node scripts/build-icons.mjs",
+    "screenshots": "node scripts/screenshots.mjs"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.43.1"
+  }
+}
